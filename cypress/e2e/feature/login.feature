@@ -13,5 +13,5 @@ Feature: User Login
   Scenario: Login with empty fields
       When I leave the username and password fields empty
        And I click the login button
-      Then I should see an error message
+      Then I should see an validation message
 
