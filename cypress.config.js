@@ -5,7 +5,7 @@ const mochawesome = require('cypress-mochawesome-reporter/plugin');
 
 module.exports = defineConfig({
   e2e: {
-    specPattern: 'cypress/e2e/feature/*.feature', // Recognizes feature files
+    specPattern: '**/*.feature', // Recognizes feature files
     setupNodeEvents(on, config) {
       on('file:preprocessor', cucumber()); // Enables Cucumber preprocessor
       mochawesome(on); // Enables Mochawesome reporter
