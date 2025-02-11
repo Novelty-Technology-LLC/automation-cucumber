@@ -26,6 +26,16 @@ Feature: User Management
           And I enter valid user details
           And I click the Save button
          Then I should see error message
+     
+     Scenario: I should be able to manage permission for an existing user successfully
+         When I click the manage permissions button 
+          And I update the permission to perform the settings task
+          And I click the Save button on roles and permissions
+         Then I should able to see 'setting' tab
+
+     Scenario: I should be able to uncheck the permission for an existing user
+          When I click the manage permissions button
+          Then I uncheck the setting permission
 
     Scenario: I should be able to edit an existing user successfully
          When I click the edit button 
@@ -38,8 +48,29 @@ Feature: User Management
           And I click the confirm button
          Then I should see a success message 'User deleted successfully'
 
-    
+    Scenario: I should be able to search the user
+         When I enter 'Deepsana' in the search bar
+         Then The user table should only display users with names containing 'Deepsana'
+
+    Scenario: I should be able to search the user by role
+         When I click on advance search bar
+          And I select the role as 'Representative'
+          And I click the apply button
+         Then The user table should only display users with Role containing 'Representative'
+
+     Scenario: I should be able to search the user by status
+         When I click on advance search bar
+          And I select the status as 'Active'
+          And I click the apply button
+         Then The user table should only display users with Status containing 'Active'
+
+     Scenario: I should be able to clear the advance search filter
+         When I click on advance search bar
+          And I select the status as 'Active'
+          And I select the role as 'Representative'
+         Then I click the clear filter button
          
+          
 
     
 

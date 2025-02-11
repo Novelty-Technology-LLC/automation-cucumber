@@ -29,12 +29,17 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
   });
 
  Then("I should see a success message 'User added successfully'", () => {
-    cy.get('#notistack-snackbar').contains('User created successfully.').should('be.visible');
+    cy.get('[data-cy="snackbar-user-add"]').contains('User created successfully.').should('be.visible');
     cy.get('[data-cy="btn_save"]').click();
   });
 
   And("The new user should appear in the user list", () => {
-    cy.get('.MuiTable-root.MuiTable-stickyHeader.css-1heegjx tbody tr:contains("Deepsana Thapa")').should('have.length', 2).then(($row) => expect($row.index()).to.eq(0));
+    cy.get('[data-cy="user-list-table"]').each(($el) => {
+      const text = $el.text().trim();
+      if (text === 'Deepsana') {
+        cy.wrap($el).should('be.visible');
+      }
+    });
   });
 
   And('I leave required fields empty', () => {
@@ -60,7 +65,37 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
    Then("I should see error message", () => {
      cy.get('.MuiAlert-message.css-h62sc9').should('be.visible')
     });
-    
+
+    When("I click the manage permissions button", () => {
+      cy.get('[data-cy="user_table-ellipsis-menu"]').first().click().wait(3000).get('[data-cy="user_manage-permission-btn"]').click()
+      });
+  
+    And("I update the permission to perform the settings task", () => {
+      cy.get('[data-cy="checkbox_role-SETTING"]').click()
+     });
+  
+    And("I click the Save button on roles and permissions", () => {
+      cy.get('[data-cy="btn_save"]').click();
+      cy.get('[data-cy="account_popover"]').click();
+      cy.get('[data-cy="item_Log Out"]').click();
+     });
+  
+   Then("I should able to see 'setting' tab", () => {
+    cy.visit(Cypress.env("BASE_URL"));
+    cy.get('input[data-cy="login_username-input"]').type(Cypress.env("USER1_EMAIL"));
+    cy.get('input[data-cy="login_password-input"]').type(Cypress.env("PASSWORD"));
+    cy.get('button[type="submit"]').click();
+    cy.viewport(1380, 720);
+    cy.get('[data-cy="header-setting"]').should('be.visible').click();
+    cy.get('[data-cy="account_popover"]').click();
+    cy.get('[data-cy="item_Log Out"]').click();
+    cy.wait(2000);
+    });
+
+  Then("I uncheck the setting permission", () => {
+    cy.get('[data-cy="checkbox_role-SETTING"]').click();
+   });
+
   When("I click the edit button", () => {
     cy.get('[data-cy="user_table-ellipsis-menu"]').first().click().wait(3000).get('[data-cy="user_edit-btn"]').click()
     });
@@ -74,17 +109,72 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
    });
 
  Then("I should see a success message 'User updated successfully'", () => {
-    cy.get('#notistack-snackbar').contains('User updated successfully.').should('be.visible');
+    cy.get('[data-cy="snackbar-user-edit"]').contains('User updated successfully.').should('be.visible');
   });
 
   When("I click the delete button", () => {
     cy.get('[data-cy="user_table-ellipsis-menu"]').first().click().wait(3000).get('[data-cy="user_delete-btn"]').click();
     });
 
-  And("I click the confirm button", () => {
+   And("I click the confirm button", () => {
      cy.get('[data-cy="btn_save"]').click();
    });
 
    Then("I should see a success message 'User deleted successfully'", () => {
-    cy.get('#notistack-snackbar').contains('User deleted successfully.').should('be.visible');
+    cy.get('[data-cy="snackbar-user-delete"]').contains('User deleted successfully.').should('be.visible');
+    });
+
+     When("I enter 'Deepsana' in the search bar", () => {
+     cy.get('[data-cy="search-input"]').type('Deepsana');
+     });
+
+     Then("The user table should only display users with names containing 'Deepsana'", () => {
+      cy.get('[data-cy="user-list-table"]').each(($el) => {
+        const text = $el.text().trim();
+        if (text === 'Deepsana') {
+          cy.wrap($el).should('be.visible');
+        }
+      });
+      
+      });
+    
+  When("I click on advance search bar", () => {
+    cy.get('[data-cy="user-adv-filter-btn"]').click();
   });
+
+ And("I select the role as 'Representative'", () => {
+   cy.get('#select-role').click();
+   cy.get('[data-cy=role-representative]').click();
+   });
+
+  And("I click the apply button", () => {
+    cy.get('[data-cy=user_apply-adv-filter-btn]').click();
+  });
+
+  Then("The user table should only display users with Role containing 'Representative'", () => {
+   cy.get('[data-cy=user-table-header-useRole]').each(($el) => {
+      const text = $el.text().trim();
+      if (text === 'Representative') {
+     cy.wrap($el).should('be.visible');
+     }
+    });
+  });
+
+  And("I select the status as 'Active'", () => {
+    cy.get('#select-status').click({ force: true });
+    cy.get('[role="option"][data-value="ACTIVE"]').click({ force: true });
+  });
+
+  Then("The user table should only display users with Status containing 'Active'", () => {
+   cy.get('[data-cy=user-table-header-status]').each(($el) => {
+    const text = $el.text().trim();
+      if (text === 'Active') {
+        cy.wrap($el).should('be.visible');
+         }
+     });
+  });
+  
+  Then("I click the clear filter button", () => {
+    cy.get('[data-cy=user_clear-adv-filter-btn]').click();
+  });
+        

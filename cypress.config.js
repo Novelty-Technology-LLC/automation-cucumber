@@ -22,6 +22,7 @@ module.exports = defineConfig({
       BASE_URL: process.env.CYPRESS_BASE_URL,
       USER_EMAIL: process.env.CYPRESS_USER_EMAIL,
       PASSWORD: process.env.CYPRESS_PASSWORD,
+      USER1_EMAIL: process.env.CYPRESS_USER1_EMAIL,
     },
   },
 });
