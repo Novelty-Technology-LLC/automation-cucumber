@@ -25,12 +25,12 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
   });
   
  And("I click the Save button", () => {
-    cy.get('[data-cy=user_form-submit-btn]').click();
+    cy.get('[data-cy=user-submit-btn]').click();
   });
 
  Then("I should see a success message 'User added successfully'", () => {
     cy.get('[data-cy="snackbar-user-add"]').contains('User created successfully.').should('be.visible');
-    cy.get('[data-cy="btn_save"]').click();
+    cy.get('[data-cy="btn_confirm"]').click();
   });
 
   And("The new user should appear in the user list", () => {
@@ -117,7 +117,7 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
     });
 
    And("I click the confirm button", () => {
-     cy.get('[data-cy="btn_save"]').click();
+     cy.get('[data-cy="btn_confirm"]').click();
    });
 
    Then("I should see a success message 'User deleted successfully'", () => {
