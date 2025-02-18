@@ -24,7 +24,7 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
     cy.get('[data-cy="user_form-email-input"]').type('deepsana+1@noveltytechnology.com');
   });
   
- And("I click the Save button", () => {
+ And("I click the Save button on add user modal", () => {
     cy.get('[data-cy=user-submit-btn]').click();
   });
 
@@ -42,13 +42,13 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
     });
   });
 
-  And('I leave required fields empty', () => {
+  And('I leave required fields empty while adding user', () => {
     cy.get('[data-cy="user_form-firstname-input"]').type(" ");
     cy.get('[data-cy="user_form-lastname-input"]').type(" ");
     cy.get('[data-cy="user_form-email-input"]').type(" ");
    });
   
-   Then("I should see validation messages for missing fields", () => {
+   Then("I should see validation messages for missing fields on add user modal", () => {
     cy.get('[data-cy="user_form-firstname-helpertext"]').should('be.visible')
     });
  
@@ -58,15 +58,15 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
     cy.get('[data-cy="user_form-email-input"]').type("deepsana@");
    });
 
-   Then("I should see validation message", () => {
+   Then("I should see validation message for invalid email format", () => {
     cy.get('[data-cy="user_form-email-helpertext"]').should('be.visible')
     });
 
-   Then("I should see error message", () => {
+   Then("I should see error message for existing email address", () => {
      cy.get('.MuiAlert-message.css-h62sc9').should('be.visible')
     });
 
-    When("I click the manage permissions button", () => {
+    When("I click the manage permissions button of particular user", () => {
       cy.get('[data-cy="user_table-ellipsis-menu"]').first().click().wait(3000).get('[data-cy="user_manage-permission-btn"]').click()
       });
   
@@ -96,7 +96,7 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
     cy.get('[data-cy="checkbox_role-SETTING"]').click();
    });
 
-  When("I click the edit button", () => {
+  When("I click the edit button of particular user", () => {
     cy.get('[data-cy="user_table-ellipsis-menu"]').first().click().wait(3000).get('[data-cy="user_edit-btn"]').click()
     });
 
@@ -104,19 +104,19 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
     cy.get('[data-cy="user_form-phone-input"]').type("1234567896")
    });
 
-  And("I click the Update button", () => {
-    cy.get('[data-cy="user_form-submit-btn"]').click();
+  And("I update user details", () => {
+    cy.get('[data-cy="user-submit-btn"]').click();
    });
 
  Then("I should see a success message 'User updated successfully'", () => {
     cy.get('[data-cy="snackbar-user-edit"]').contains('User updated successfully.').should('be.visible');
   });
 
-  When("I click the delete button", () => {
+  When("I click the delete button of particular user", () => {
     cy.get('[data-cy="user_table-ellipsis-menu"]').first().click().wait(3000).get('[data-cy="user_delete-btn"]').click();
     });
 
-   And("I click the confirm button", () => {
+   And("I confirm user deletion", () => {
      cy.get('[data-cy="btn_confirm"]').click();
    });
 
@@ -138,7 +138,7 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
       
       });
     
-  When("I click on advance search bar", () => {
+  When("I click on advance search bar on user page", () => {
     cy.get('[data-cy="user-adv-filter-btn"]').click();
   });
 
