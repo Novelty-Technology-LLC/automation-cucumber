@@ -15,7 +15,7 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
   });
 
   And('I enter valid queue details', () => {
-    cy.get('[data-cy="input_queue-name"]').type("example");
+    cy.get('[data-cy="input_queue-name"]').type("Automation");
     cy.get('#processingType').click();
     cy.get('[data-cy="processingType-automatic"]').click();
     cy.get('#tags').click(); 
@@ -48,11 +48,12 @@ When("I click the Assign Representative button", () => {
 And('I enter the representative name', () => {
   cy.get('[data-cy="input_user-autocomplete"]').type('Deepsana Thapa');
   cy.wait(1000)
-  cy.get('[data-cy="input_user-autocomplete"]').wait(1000).type('{downarrow}').type('{enter}');
+  cy.get('[data-cy="input_user-autocomplete"]').click().wait(1000).type('{downarrow}').type('{enter}');
 });
 
 And('I click the Save button on modal', () => {
   cy.get('[data-cy="assignee-save-btn"]').click();
+  cy.reload();
 });
 
 Then("I should see assigned reps", () => {
@@ -94,7 +95,7 @@ When("I click the Edit button of particular queue", () => {
 });
 
 And('I edit with duplicate queue name', () => {
-  cy.get('[data-cy="input_queue-name"]').type("example"); 
+  cy.get('[data-cy="input_queue-name"]').clear().type("Signature"); 
   cy.get('body').type('{esc}');
 });
 
@@ -106,20 +107,52 @@ Then("I should see error message while editing the queue", () => {
   cy.get('[data-cy="queue-error-msg"]').should('be.visible')
  });
 
-When("I verify that the queue does not contain any tasks", () => {
-    cy.get('[data-cy="header-ar module"]').click()
-    cy.get('[data-cy="queue-header"]').contains('example').should('be.visible').wait(1000).get('[data-cy="queue-count"]').should('contain', '0'); 
-});
-
-And("I click the Delete button of particular queue", () => {
-    cy.get('[data-cy="header-setting"]').click();
-    cy.get('[data-cy="sidebar-queue-management"]').click();
-    cy.get('[data-cy="queue_table-ellipsis-menu"]').first().click().wait(3000).get('[data-cy="queue_delete-btn"]').click();
-    cy.get('[data-cy="queue-delete-btn"]').click(); 
+When("I verify that a queue does not contain any tasks", () => {
+  cy.get('[data-cy="header-ar module"]').click();
+  cy.get('[data-cy="queue-header"]')
+    .then(($queues) => {
+      let found = false;
+      $queues.each((index, queue) => {
+        if (found) return false; // Breaks out of the loop manually
+        const queueText = Cypress.$(queue).text().trim(); // Get queue name synchronously
+        cy.get('[data-cy="queue-count"]').wait(1000)
+          .eq(index)
+          .invoke("text")
+          .then((countText) => {
+            const count = parseInt(countText.trim(), 10);
+            if (count === 0) {
+              cy.wrap(queueText).as("Queue");
+              cy.wrap(count).as("selectedQueueCount");
+              cy.log(`Queue: ${queueText}, Count: ${count}`);
+              found = true; // Stop further execution
+            }
+          });
+      });
+    });
 });
 
 And('I confirm queue deletion', () => {
-    cy.get('[data-cy="queue-delete-btn"]').click();
+    cy.get('[data-cy="header-setting"]').click();
+    cy.get('[data-cy="sidebar-queue-management"]').click();
+    cy.get('@Queue').then((queueText) => {
+    cy.log("Queue Name Found:", queueText); // Debugging
+    cy.wait(1000);
+    // **Find the correct queue row dynamically**
+    cy.get('table tr').each(($row) => {
+      cy.wrap($row)
+        .find('th:nth-child(1)') // Locate the queue name
+        .invoke('text')
+        .then((text) => {
+          if (text.trim() === queueText) {
+            cy.log("Delete Queue Name:", queueText);
+            cy.wrap($row)
+              .get('[data-cy="queue_table-ellipsis-menu"]').eq(0)
+              .click().wait(3000).get('[data-cy="queue_delete-btn"]').click();
+              cy.get('[data-cy="queue-delete-btn"]').click();
+          }
+        });
+    });
+  });
 });
 
 Then("I should see a success message 'Queue deleted successfully'", () => {
@@ -127,16 +160,55 @@ Then("I should see a success message 'Queue deleted successfully'", () => {
     cy.reload();
 });
 
-When("I verify that the queue contains a task", () => {
-  cy.get('[data-cy="header-ar module"]').click()
-    cy.get('[data-cy="queue-header"]').wait(1000).eq(5).contains('Wm Roob').should('be.visible').get('[data-cy="queue-count"]').invoke('text')
-  .then((text) => {
-    const count = parseInt(text.trim(), 10);
-    expect(count).to.be.greaterThan(0);
+When("I verify that a queue contains tasks ", () => {
+  cy.get('[data-cy="header-ar module"]').click();
+  cy.get('[data-cy="queue-header"]')
+    .then(($queues) => {
+      let found = false;
+      $queues.each((index, queue) => {
+        if (found) return false; // Breaks out of the loop manually
+        const queueText = Cypress.$(queue).text().trim(); // Get queue name synchronously
+        cy.get('[data-cy="queue-count"]').wait(1000)
+          .eq(index)
+          .invoke("text")
+          .then((countText) => {
+            const count = parseInt(countText.trim(), 10);
+            if (count > 0) {
+              cy.wrap(queueText).as("selectedQueue");
+              cy.wrap(count).as("selectedQueueCount");
+              cy.log(`Selected Queue: ${queueText}, Count: ${count}`);
+              found = true; // Stop further execution
+            }
+          });
+      });
+    });
+});
+
+And('I confirm the deletion of the queue, which contains a task.', () => {
+  cy.get('[data-cy="header-setting"]').click();
+    cy.get('[data-cy="sidebar-queue-management"]').click();
+    cy.get('@selectedQueue').then((queueText) => {
+    cy.log("Queue Name Found:", queueText); // Debugging
+    cy.wait(1000);
+    // **Find the correct queue row dynamically**
+    cy.get('table tr').each(($row) => {
+      cy.wrap($row)
+        .find('th:nth-child(1)') // Locate the queue name
+        .invoke('text')
+        .then((text) => {
+          if (text.trim() === queueText) {
+            cy.log("Delete Queue Name:", queueText);
+            cy.wrap($row)
+              .find('[data-cy="queue_table-ellipsis-menu"]')
+              .click().wait(3000).get('[data-cy="queue_delete-btn"]').click();
+              cy.get('[data-cy="queue-delete-btn"]').wait(1000).click();
+          }
+        });
+    });
   });
 });
 
 Then("I should see error message for queue with task", () => {
-    cy.get('[data-cy="queue-error-msg"]').should('be.visible')
+    cy.get('[data-cy="snackbar-queue-delete-error"]').should('be.visible')
 });
 

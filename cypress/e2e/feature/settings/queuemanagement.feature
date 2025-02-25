@@ -39,15 +39,13 @@ Feature: Queue Management
         Then I should see error message while editing the queue
     
     Scenario: I should be able to a delete empty queue
-         When I verify that the queue does not contain any tasks
-          And I click the Delete button of particular queue
+         When I verify that a queue does not contain any tasks 
           And I confirm queue deletion
          Then I should see a success message 'Queue deleted successfully'
 
     Scenario: I should not be able to delete queue with task
-         When I verify that the queue contains a task
-          And I click the Delete button of particular queue
-          And I confirm queue deletion
+         When I verify that a queue contains tasks 
+          And I confirm the deletion of the queue, which contains a task.
          Then I should see error message for queue with task
 
     
