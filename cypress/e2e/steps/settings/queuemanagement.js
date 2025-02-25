@@ -78,7 +78,7 @@ Then("I should see validation messages for missing fields", () => {
 });
 
 And('I enter duplicate queue name', () => {
-    cy.get('[data-cy="input_queue-name"]').type("example");
+    cy.get('[data-cy="input_queue-name"]').type("Automation");
     cy.get('#processingType').click();
     cy.get('[data-cy="processingType-automatic"]').click();
     cy.get('#tags').click(); 
@@ -160,7 +160,7 @@ Then("I should see a success message 'Queue deleted successfully'", () => {
     cy.reload();
 });
 
-When("I verify that a queue contains tasks ", () => {
+When("I verify that a queue contains tasks", () => {
   cy.get('[data-cy="header-ar module"]').click();
   cy.get('[data-cy="queue-header"]')
     .then(($queues) => {
