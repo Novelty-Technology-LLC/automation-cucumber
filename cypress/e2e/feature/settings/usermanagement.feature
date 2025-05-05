@@ -1,3 +1,4 @@
+@User
 Feature: User Management
   Background:
       Given I am on the User Management page  

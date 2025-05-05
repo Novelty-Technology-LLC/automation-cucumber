@@ -13,7 +13,7 @@
     "stepDefinitions": "cypress/e2e/steps"
   },
   "scripts": {
-  "clean-reports": "rm -rf cypress/results/*",
-  "test": "npm run clean-reports && cypress run"
-}
+    "clean-reports": "rm -rf cypress/results/*",
+    "test": "npm run clean-reports && cypress run"
+  }
 }

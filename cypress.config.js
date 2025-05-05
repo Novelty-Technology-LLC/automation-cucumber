@@ -19,6 +19,7 @@ module.exports = defineConfig({
       json: true,
     },
     env: {
+      TAGS: process.env.TAGS || '',
       BASE_URL: process.env.CYPRESS_BASE_URL,
       USER_EMAIL: process.env.CYPRESS_USER_EMAIL,
       PASSWORD: process.env.CYPRESS_PASSWORD,
