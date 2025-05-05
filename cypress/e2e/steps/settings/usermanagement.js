@@ -6,6 +6,7 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
     cy.get('input[data-cy="login_password-input"]').type(Cypress.env("PASSWORD"));
     cy.get('button[type="submit"]').click();
     cy.viewport(1380, 720);
+    cy.wait(1000);
     cy.get('[data-cy="header-setting"]').click();
   });
 
@@ -117,7 +118,7 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
     });
 
    And("I confirm user deletion", () => {
-     cy.get('[data-cy="btn_confirm"]').click();
+     cy.get('[data-cy="btn_delete"]').click();
    });
 
    Then("I should see a success message 'User deleted successfully'", () => {
