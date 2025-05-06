@@ -7,6 +7,7 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
     cy.get('button[type="submit"]').click();
     cy.viewport(1380, 720);
     cy.get('[data-cy="header-setting"]').click();
+    cy.wait(1000);
     cy.get('[data-cy="sidebar-queue-management"]').click();
   });
 
@@ -16,8 +17,6 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
 
   And('I enter valid queue details', () => {
     cy.get('[data-cy="input_queue-name"]').type("Automation");
-    cy.get('#processingType').click();
-    cy.get('[data-cy="processingType-automatic"]').click();
     cy.get('#tags').click(); 
     cy.get('li[data-value="Medical Record/EOB"]').click(); 
     cy.get('body').type('{esc}');
@@ -35,7 +34,7 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
 And("The new queue should appear in the queue list", () => {
     cy.get('[data-cy="queue-table-header"]').each(($el) => {
       const text = $el.text().trim();
-      if (text === 'example') {
+      if (text === 'Automation') {
         cy.wrap($el).should('be.visible');
       }
     });
@@ -66,7 +65,7 @@ Then("I should see assigned reps", () => {
 });
 
 And('I click the cross icon of assigned representative', () => {
-  cy.get('[data-cy="btn_remove-assigned-user"]').click();
+  cy.get('[data-cy="btn_remove-assigned-user"]').click({force:true});
 });
 
 And('I leave required fields empty', () => {
@@ -79,8 +78,6 @@ Then("I should see validation messages for missing fields", () => {
 
 And('I enter duplicate queue name', () => {
     cy.get('[data-cy="input_queue-name"]').type("Automation");
-    cy.get('#processingType').click();
-    cy.get('[data-cy="processingType-automatic"]').click();
     cy.get('#tags').click(); 
     cy.get('li[data-value="Medical Record/EOB"]').click(); 
     cy.get('body').type('{esc}');

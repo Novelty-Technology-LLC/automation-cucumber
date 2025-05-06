@@ -1,3 +1,4 @@
+@Queue
 Feature: Queue Management
   Background:
       Given I am on the Queue Management page  
@@ -20,7 +21,7 @@ Feature: Queue Management
           And I click the cross icon of assigned representative
           And I click the Save button on modal
 
-   Scenario: I should not be able to add a new user with missing fields
+   Scenario: I should not be able to add a new queue with missing fields
        When I click the Add Queue button
         And I leave required fields empty
         And I click the Save button on add queue modal
