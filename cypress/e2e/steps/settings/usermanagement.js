@@ -77,6 +77,7 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
   
     And("I click the Save button on roles and permissions", () => {
       cy.get('[data-cy="btn_save"]').click();
+      cy.get('[data-cy="snackbar-assign-user-permission"]').contains('Resource Permission updated successfully').should('be.visible')
       cy.get('[data-cy="account_popover"]').click();
       cy.get('[data-cy="item_Log Out"]').click();
      });

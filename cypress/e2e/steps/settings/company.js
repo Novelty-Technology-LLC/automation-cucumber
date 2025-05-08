@@ -57,6 +57,7 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
     cy.get('[data-cy="input_payerId"]').type("0707");
     cy.get('#tpa-company').click();
     cy.get('[data-cy=role-post-n-track]').click();
+    cy.get('[data-cy=company-submit-btn]').click();
   });
 
   Then("I should see validation messages'Code already occupied'", () => {
@@ -64,15 +65,15 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
   });
 
   When("I click the edit button of particular company", () => {
-    cy.get('#companies-ellipsis-actions-button-0').first().click().wait(1000).get('#company-edit-option-0').click();
+    cy.get('[data-cy="company-ellipse-btn"]').first().click({force:true}).wait(3000).get('[data-cy="company-add-btn"]').click();
   });
 
   And("I update the company details", () => {
-    cy.get('[data-cy="input_companyName"]').type("Test company1");
+    cy.get('[data-cy="input_companyName"]').clear().type("Test company1");
   });
 
   And("I update company details", () => {
-    cy.get('[data-cy=data-cy="company-submit-btn"]').click();
+    cy.get('[data-cy="company-submit-btn"]').click();
   });
   
   Then("I should see a success message 'Company updated successfully'", () => {
@@ -84,3 +85,15 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
         }
     });
   });
+
+  When("I click the delete button of particular company", () => {
+    cy.get('[data-cy="company-ellipse-btn"]').first().click({force:true}).wait(3000).get('[data-cy="company-delete-btn"]').click();
+    });
+
+   And("I confirm company deletion", () => {
+     cy.get('[data-cy="btn_confirm"]').click();
+   });
+
+   Then("I should see a success message 'Company deleted successfully'", () => {
+    cy.get('[data-cy="snackbar-company-delete"]').contains('Company deleted successfully.').should('be.visible');
+    });

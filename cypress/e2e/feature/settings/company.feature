@@ -1,3 +1,4 @@
+@Company
 Feature: Companies
   Background:
       Given I am on the Companies page  
@@ -25,3 +26,8 @@ Feature: Companies
          And I update the company details
          And I update company details
         Then I should see a success message 'Company updated successfully'
+
+  Scenario: I should be able to delete a company successfully
+         When I click the delete button of particular company
+          And I confirm company deletion
+         Then I should see a success message 'Company deleted successfully'
