@@ -20,6 +20,7 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
     cy.get('#tags').click(); 
     cy.get('li[data-value="Medical Record/EOB"]').click(); 
     cy.get('body').type('{esc}');
+    cy.get('[data-cy="switch-auto-assign"]').click();
   });
   
  And("I click the Save button on add queue modal", () => {

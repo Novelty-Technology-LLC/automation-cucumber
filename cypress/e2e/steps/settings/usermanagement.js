@@ -64,7 +64,7 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
     });
 
    Then("I should see error message for existing email address", () => {
-     cy.get('.MuiAlert-message.css-h62sc9').should('be.visible')
+     cy.get('[data-cy="user-add-edit-error"]').should('be.visible')
     });
 
     When("I click the manage permissions button of particular user", () => {
