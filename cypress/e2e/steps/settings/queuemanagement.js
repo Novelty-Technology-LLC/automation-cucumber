@@ -17,7 +17,7 @@ import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
 
   And('I enter valid queue details', () => {
     cy.get('[data-cy="input_queue-name"]').type("Automation");
-    cy.get('#tags').click(); 
+    cy.get('[data-cy=queue-tag-select]').click(); 
     cy.get('li[data-value="Medical Record/EOB"]').click(); 
     cy.get('body').type('{esc}');
     cy.get('[data-cy="switch-auto-assign"]').click();
@@ -79,7 +79,7 @@ Then("I should see validation messages for missing fields", () => {
 
 And('I enter duplicate queue name', () => {
     cy.get('[data-cy="input_queue-name"]').type("Automation");
-    cy.get('#tags').click(); 
+    cy.get('#queue-tag-select').click(); 
     cy.get('li[data-value="Medical Record/EOB"]').click(); 
     cy.get('body').type('{esc}');
 });
