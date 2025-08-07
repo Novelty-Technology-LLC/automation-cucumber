@@ -1,40 +1,35 @@
 import { Given, When, Then } from "cypress-cucumber-preprocessor/steps";
+import { loginPage } from '../../pages/authentication/loginpage.js';
 
  Given("I visit the login page", () => {
-    cy.visit(Cypress.env("BASE_URL"));
+    loginPage.visit();
   });
 
  When("I enter valid username and password", () => {
-    cy.get('input[data-cy="login_username-input"]').type(Cypress.env("USER_EMAIL"));
-    cy.get('input[data-cy="login_password-input"]').type(Cypress.env("PASSWORD"));
-    cy.get('button[type="submit"]').click();
+    loginPage.loginValidUser();
   });
   
  Then("I should be redirected to the dashboard", () => {
-    cy.url().should("eq", `${Cypress.env("BASE_URL")}/dashboard`);
+    loginPage.verifyDashboardUrl();
   });
 
   When("I enter an invalid username or password", () => {
-    cy.get('input[data-cy="login_username-input"]').type("example");
-    cy.get('input[data-cy="login_password-input"]').type("example");
-    cy.get('button[type="submit"]').click();
+    loginPage.loginInvalidUser();
   });
 
   Then("I should see an error message", () => {
-    cy.get('[data-cy="login_error-div"]').should('be.visible')
+    loginPage.verifyLoginError();
   });
 
   When("I leave the username and password fields empty", () => {
-    cy.get('input[data-cy="login_username-input"]').type(" ");
-    cy.get('input[data-cy="login_password-input"]').type(" ");
-    cy.get('button[type="submit"]').click();
+      loginPage.loginWithEmptyFields();
   });
 
   And('I click the login button', () => {
-    cy.get('button[type="submit"]').click();
+    loginPage.clickLoginButton();
   });
 
   Then("I should see an validation message", () => {
-    cy.get('[data-cy="login_username-helpertext"]').should('be.visible')
+    loginPage.verifyValidationMessage();
   });
 

@@ -1,99 +1,83 @@
 import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
+import { companyPage } from "../../pages/setting/companypage.js";
+import { loginPage } from '../../pages/authentication/loginpage.js';
 
  Given("I am on the Companies page", () => {
-    cy.visit(Cypress.env("BASE_URL"));
-    cy.get('input[data-cy="login_username-input"]').type(Cypress.env("USER_EMAIL"));
-    cy.get('input[data-cy="login_password-input"]').type(Cypress.env("PASSWORD"));
-    cy.get('button[type="submit"]').click();
-    cy.viewport(1380, 720);
-    cy.get('[data-cy="header-setting"]').click();
-    cy.get('[data-cy="sidebar-company"]').click();
+    loginPage.visit();
+    loginPage.loginValidUser();
+    companyPage.goToCompaniesPage();
   });
 
  When("I click the Add button on Companies page", () => {
-    cy.get('[data-cy="btn_add"]').click();
+    companyPage.clickAddButton();
   });
 
   And('I enter valid company details', () => {
-    cy.get('[data-cy="input_companyName"]').type("Test company");
-    cy.get('[data-cy="input_company-code"]').type("a70701");
-    cy.get('[data-cy="input_payerId"]').type("0707");
-    cy.get('#tpa-company').click();
-    cy.get('[data-cy=role-post-n-track]').click();
+    companyPage.enterCompanyDetails({
+    name: "Test company",
+    code: "a70701",
+    payerId: "0707"
+  });
   });
   
  And("I click the Save button on add company modal", () => {
-    cy.get('[data-cy=company-submit-btn]').click();
+    companyPage.saveCompany();
   });
 
  Then("I should see a success message 'Company added successfully'", () => {
-    cy.get('[data-cy="snackbar-company-add"]').contains('Company created successfully.').should('be.visible');
+    companyPage.verifySuccessMessage("Company created successfully");
   });
 
   And("The new company should appear in the company list", () => {
-    cy.get('[data-cy="company-list-table"]').each(($el) => {
-      const text = $el.text().trim();
-      if (text === 'Test company') {
-        cy.wrap($el).should('be.visible');
-      }
-    });
+   companyPage.verifyCompanyInList();
   });
 
+
   And('I leave required fields empty on add company modal', () => {
-    cy.get('[data-cy="input_companyName"]').type(" ");
-    cy.get('[data-cy="input_company-code"]').type(" ");
-    cy.get('[data-cy="input_payerId"]').type(" ");
+    companyPage.leaveRequiredFieldsEmpty();
   });
 
   Then("I should see validation messages for missing fields on modal", () => {
-    cy.get('[data-cy="helpertext_companyName"]').should('be.visible')
-    cy.get('[data-cy="helpertext_company-code"]').should('be.visible')
-    cy.get('[data-cy="helpertext_payerId"]').should('be.visible')
+   companyPage.verifyValidationMessages;
   });
 
   And('I enter duplicate company code', () => {
-    cy.get('[data-cy="input_companyName"]').type("Test company");
-    cy.get('[data-cy="input_company-code"]').type("a70701");
-    cy.get('[data-cy="input_payerId"]').type("0707");
-    cy.get('#tpa-company').click();
-    cy.get('[data-cy=role-post-n-track]').click();
-    cy.get('[data-cy=company-submit-btn]').click();
+    companyPage.enterDuplicateCompanyCode({
+    name: "Test company",
+    code: "a70701",
+    payerId: "0707"
+    });
+    companyPage.saveCompany();
   });
 
   Then("I should see validation messages'Code already occupied'", () => {
-    cy.get('[data-cy="helpertext_company-code"]').should('be.visible')
+    companyPage.verifyDuplicateCodeError();
   });
 
   When("I click the edit button of particular company", () => {
-    cy.get('[data-cy="company-ellipse-btn"]').first().click({force:true}).wait(3000).get('[data-cy="company-add-btn"]').click();
+    companyPage.clickCompanyEditButton();
   });
 
   And("I update the company details", () => {
-    cy.get('[data-cy="input_companyName"]').clear().type("Test company1");
+    companyPage.updateCompanyName("Test company1");
   });
 
   And("I update company details", () => {
-    cy.get('[data-cy="company-submit-btn"]').click();
+    companyPage.submitCompanyDetails();
   });
   
   Then("I should see a success message 'Company updated successfully'", () => {
-    cy.get('[data-cy="snackbar-company-edit"]').should('be.visible')
-    cy.get('[data-cy="company-list-table"]').each(($el) => {
-        const text = $el.text().trim();
-        if (text === 'Test company1') {
-          cy.wrap($el).should('be.visible');
-        }
-    });
+   companyPage.verifyCompanyUpdated("Test company1");
   });
 
   When("I click the delete button of particular company", () => {
-    cy.get('[data-cy="company-ellipse-btn"]').first().click({force:true}).wait(3000).get('[data-cy="company-delete-btn"]').click();
+    companyPage.clickCompanyDeleteButton();
     });
 
    And("I confirm company deletion", () => {
-     cy.get('[data-cy="btn_confirm"]').click();
+     companyPage.confirmCompanyDeletion();
    });
 
    Then("I should see a success message 'Company deleted successfully'", () => {
-    cy.get('[data-cy="snackbar-company-delete"]').contains('Company deleted successfully.').should('be.visible');
+    companyPage.verifyCompanyDeleted();
     });
