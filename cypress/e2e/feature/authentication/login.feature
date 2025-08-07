@@ -1,3 +1,4 @@
+@login
 Feature: User Login
   Background:
       Given I visit the login page   
