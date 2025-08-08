@@ -16,7 +16,7 @@ Feature: Queue Management
           And I click the Save button on modal
          Then I should see assigned reps
 
-    Scenario: I should be able to unassign representative 
+    Scenario: I should be able to unassign representative
          When I click the Assign Representative button
           And I click the cross icon of assigned representative
           And I click the Save button on modal
