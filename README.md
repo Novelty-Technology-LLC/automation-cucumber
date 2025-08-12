@@ -39,6 +39,12 @@ So once everything is done, we need to open the cypress and we need command for 
 npx cypress open
 ```
 
+Use the --tags option in the Cucumber command to execute only one feature file by specifying the unique hook (tag) name defined at the top of that feature file.
+
+```
+npx cypress run --env TAGS="@User"
+```
+
 Rename the env.example to .env and update accordingly.
 
 ### Note: 
