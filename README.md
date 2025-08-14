@@ -11,7 +11,6 @@
  ## Key Features of Cypress:
 
 - Time travel for real-time debugging of web apps.
-
 - Cypress network control.
 - API testing capabilities.
 - Innovative component testing capabilities.
