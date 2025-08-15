@@ -5,10 +5,9 @@ Feature: Patient Responsibility Report Generation
 
   Scenario: Generate button should be disabled by default on patient responsibility report page
        Then Generate report button should be disabled
-        And Check number dropdown should be empty
-
+       
   Scenario: Generate button should be enabled after entering any one field on patient responsibility report page
-       When I select the check number from dropdown
+       When I enter the authorization number in authorization number field
        Then Generate report button should be enabled
 
   Scenario: Generate patient responsibility report and verify table headers
