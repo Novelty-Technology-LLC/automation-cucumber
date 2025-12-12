@@ -62,13 +62,13 @@ class TaskCreationPage {
   }
 
   verifyTaskCreatedInCommercialQueue() {
-    cy.get('[data-cy="queue-header"]', { timeout: 30000 })
+    cy.get('[data-cy="queue-header"]', { timeout: 20000 })
       .contains('Commercial')
       .should('be.visible');
   }
 
   verifyTaskCreatedInSignatureQueue() {
-    cy.get('[data-cy="queue-header"]', { timeout: 30000 })
+    cy.get('[data-cy="queue-header"]', { timeout: 20000 })
       .contains('Signature')
       .should('be.visible');
   }
@@ -99,26 +99,26 @@ class TaskCreationPage {
   }
 
   upload835EDIFileForMedical() {
-    this.uploadFileToSftp('cypress/fixtures/medical/3314780(x288).edi', '/qa/edi_835/3314780(x288).edi');
+    this.uploadFileToSftp('cypress/fixtures/medical/3314780.edi', '/qa/edi_835/3314780.edi');
     cy.wait(30000);
   }
 
   verifyTaskCreatedInAHFQueue() {
-    cy.get('[data-cy="queue-header"]', { timeout: 30000 })
+    cy.get('[data-cy="queue-header"]', { timeout: 20000 })
       .contains('AHF')
       .scrollIntoView()
       .should('be.visible');
   }
 
   verifyTaskCreatedInMedicareQueue() {
-    cy.get('[data-cy="queue-header"]', { timeout: 30000 })
+    cy.get('[data-cy="queue-header"]', { timeout: 20000 })
       .contains('Medicare')
       .scrollIntoView()
       .should('be.visible');
   }
 
   verifyTaskCreatedInMedicalQueue() {
-    cy.get('[data-cy="queue-header"]', { timeout: 30000 })
+    cy.get('[data-cy="queue-header"]', { timeout: 20000 })
       .contains('Medical')
       .scrollIntoView()
       .should('be.visible');
