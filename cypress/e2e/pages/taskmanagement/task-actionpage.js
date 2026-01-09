@@ -13,11 +13,43 @@ class TaskActionPage {
   }
 
   clickOnTask() {
-    
     cy.get('[data-cy="task-list-item-button"]', { timeout: 20000 })
       .first()
       .click();
     cy.wait(1000);
+  }
+
+  clickOnTaskByIdentifier(taskIdentifier) {
+    cy.get('[data-cy="task-list-item-button"]', { timeout: 20000 })
+      .contains(taskIdentifier)
+      .click();
+    cy.wait(1000);
+  }
+
+  getTaskIdentifier() {
+    return cy.get('[data-cy="task-identifier"]', { timeout: 10000 })
+      .invoke('text')
+      .then((text) => {
+        return text.trim();
+      });
+  }
+
+  getTaskIdentifierFromDetail() {
+    return cy.get('[data-cy="task-identifier"]', { timeout: 10000 })
+      .invoke('text')
+      .then((text) => {
+        return text.trim();
+      });
+  }
+
+  getTaskNumberFromList() {
+    return cy.get('[data-cy="task-list-item-button"]', { timeout: 20000 })
+      .first()
+      .invoke('text')
+      .then((text) => {
+        // Extract task number from the text (assuming format like "Task 12345" or just "12345")
+        return text.trim();
+      });
   }
 
   clickEllipsesMenu() {
@@ -102,15 +134,14 @@ class TaskActionPage {
   }
 
   selectTargetQueue(queueName) {
-    cy.get('[data-cy="move-queue-select"]', { timeout: 10000 })
-      .click();
-    cy.get(`[data-cy="queue-option-${queueName}"]`)
+    // Then select the queue from dropdown using the queueName parameter
+    cy.get(`[data-cy="item_${queueName}"]`, { timeout: 10000 })
       .click();
     cy.wait(500);
   }
 
   confirmMoveAction() {
-    cy.get('[data-cy="move-confirm-btn"]', { timeout: 10000 })
+    cy.get('[data-cy="btn_confirm"]', { timeout: 10000 })
       .click();
     cy.wait(2000);
   }
@@ -120,11 +151,14 @@ class TaskActionPage {
       .should('be.visible');
   }
 
-  verifyTaskInTargetQueue(queueName) {
+  verifyTaskInTargetQueue(queueName, taskIdentifier) {
     cy.get('[data-cy="queue-header"]', { timeout: 20000 })
       .contains(queueName)
       .should('be.visible');
+    
+    // Verify the specific task is in the target queue
     cy.get('[data-cy="task-list-item-button"]', { timeout: 20000 })
+      .contains(taskIdentifier)
       .should('be.visible');
   }
 
@@ -136,16 +170,19 @@ class TaskActionPage {
   }
 
   confirmReassignBackAction() {
-    cy.get('[data-cy="reassign-back-confirm-btn"]', { timeout: 10000 })
+    cy.get('[data-cy="btn_confirm"]', { timeout: 10000 })
       .click();
     cy.wait(2000);
   }
 
-  verifyTaskReassignedBackToOriginalQueue(originalQueueName) {
+  verifyTaskReassignedBackToOriginalQueue(originalQueueName, taskIdentifier) {
     cy.get('[data-cy="queue-header"]', { timeout: 20000 })
       .contains(originalQueueName)
       .should('be.visible');
+    
+    // Verify the specific task is in the original queue
     cy.get('[data-cy="task-list-item-button"]', { timeout: 20000 })
+      .contains(taskIdentifier)
       .should('be.visible');
   }
 
@@ -159,26 +196,26 @@ class TaskActionPage {
 
   // Assign Task Actions
   clickUserAvatar() {
-    cy.get('[data-cy="task-user-avatar"]', { timeout: 10000 })
+    cy.get('[data-cy="task-list-item-assign-task-to"]', { timeout: 10000 })
       .click();
     cy.wait(500);
   }
 
   selectUserFromDropdown(userName) {
-    cy.get(`[data-cy="user-option-${userName}"]`, { timeout: 10000 })
+    cy.get(`[data-cy="item_${userName}"]`, { timeout: 10000 })
       .click();
     cy.wait(2000);
   }
 
   verifyTaskAssignedToUser(userName) {
-    cy.get('[data-cy="task-assigned-chip"]', { timeout: 10000 })
+    cy.get(`[data-cy="item_${userName}"]`, { timeout: 10000 })
       .should('be.visible')
       .and('contain', userName);
   }
 
   // Unassign Task Actions
   selectUnassignedFromDropdown() {
-    cy.get('[data-cy="user-option-Unassigned"]', { timeout: 10000 })
+    cy.get('[data-cy="item_Unassigned"]', { timeout: 10000 })
       .click();
     cy.wait(2000);
   }

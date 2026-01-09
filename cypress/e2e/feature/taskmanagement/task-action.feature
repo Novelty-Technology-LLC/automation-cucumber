@@ -8,7 +8,7 @@ Feature: Task Management - Task Actions
   Background:
       And I am logged into the system
       And I am on the AR-module
-      
+
   Scenario: I loaded files in SFTP server
     When Files are loaded in SFTP server
 
@@ -23,42 +23,40 @@ Feature: Task Management - Task Actions
       And The task should be visible in the on-hold filter
 
   Scenario: Resume a held task and verify it is resumed
-    When I click on the task
-    When I click on the ellipses menu
+     When I click on the task
+      And I click on the ellipses menu
       And I click on resume action
-    Then The task should be resumed
+     Then The task should be resumed
       And I verify the task is no longer on hold
 
   Scenario: Move task to another queue and verify it is moved
-    When I click on the task
+    When I click on the task "3452772"
       And I click on the ellipses menu
       And I click on move action
       And I select target queue "Signature"
       And I confirm the move action
     Then The task should be moved to the target queue
-      And I verify the task is in the target queue
+      And I verify the task "3452772" is in the target queue
 
   Scenario: Reassign task back and verify it is reassigned
-    Given A task is in Commercial queue
-    When I move the task to Signature queue
-      And I click on the task
+    When I click on the task "3452772" in "Signature" queue
       And I click on the ellipses menu
       And I click on reassign back action
       And I confirm the reassign back action
-    Then The task should be reassigned back to Commercial queue
-      And I verify the task is in the original queue
+    Then The task should be reassigned back to "Commercial" queue
+      And I verify the task "3452772" is in the original queue
 
   Scenario: Assign task to a user and verify it is assigned
-    When I click on the task
+    When I click on the task "3452772"
       And I click on the user avatar
-      And I select "Test User" from dropdown
+      And I select "Deepsana Thapa" from dropdown
     Then The task should be assigned to the user
       And I verify the task is assigned to the user
 
   Scenario: Unassign task from a user and verify it is unassigned
-    When I click on the task
+    When I click on the task "3452772"
     Given A task is assigned to a user
     When I click on the user avatar
       And I select "Unassigned" from dropdown
-    Then The task should be unassigned
+    Then The user should be unassigned
       And I verify the task is no longer assigned to any user
