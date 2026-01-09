@@ -20,6 +20,24 @@ When("I click on the task", () => {
   taskActionPage.clickOnTask();
 });
 
+When("I click on the task {string}", (taskIdentifier) => {
+  taskActionPage.clickOnTaskByIdentifier(taskIdentifier);
+});
+
+When("I click on the task {string} in {string} queue", (taskIdentifier, queueName) => {
+  originalQueueName = "Commercial"; // Set original queue for reassign back verification
+  movedTaskIdentifier = taskIdentifier;
+  // Find Signature queue header, then find and click the task in that queue section
+  cy.get('[data-cy="queue-header"]', { timeout: 20000 })
+    .contains(queueName)
+    .should('be.visible');
+  // Click the task - it should be in the same queue section as the header
+  cy.get('[data-cy="task-list-item-button"]', { timeout: 20000 })
+    .contains(taskIdentifier)
+    .click();
+  cy.wait(1000);
+});
+
 And("I click on the ellipses menu", () => {
   taskActionPage.clickEllipsesMenu();
 });
@@ -62,24 +80,9 @@ And("I verify the task is no longer on hold", () => {
 });
 
 // Move Task Steps
-let selectedQueueName = "";
-let originalQueueName = "";
-
-Given("A task is in {string} queue", (queueName) => {
-  originalQueueName = queueName;
-  cy.get('[data-cy="queue-header"]', { timeout: 20000 })
-    .contains(queueName)
-    .should('be.visible');
-});
-
-When("I move the task to {string} queue", (targetQueue) => {
-  taskActionPage.clickOnTask();
-  taskActionPage.clickEllipsesMenu();
-  taskActionPage.clickMoveAction();
-  selectedQueueName = targetQueue;
-  taskActionPage.selectTargetQueue(targetQueue);
-  taskActionPage.confirmMoveAction();
-});
+let selectedQueueName = "Signature";
+let originalQueueName = "Commercial";
+let movedTaskIdentifier = "3452772";
 
 And("I click on move action", () => {
   taskActionPage.clickMoveAction();
@@ -99,7 +102,11 @@ Then("The task should be moved to the target queue", () => {
 });
 
 And("I verify the task is in the target queue", () => {
-  taskActionPage.verifyTaskInTargetQueue(selectedQueueName);
+  taskActionPage.verifyTaskInTargetQueue(selectedQueueName, movedTaskIdentifier);
+});
+
+And("I verify the task {string} is in the target queue", (taskIdentifier) => {
+  taskActionPage.verifyTaskInTargetQueue(selectedQueueName, taskIdentifier);
 });
 
 // Reassign Back Steps
@@ -112,15 +119,19 @@ And("I confirm the reassign back action", () => {
 });
 
 Then("The task should be reassigned back to {string} queue", (queueName) => {
-  taskActionPage.verifyTaskReassignedBackToOriginalQueue(queueName);
+  taskActionPage.verifyTaskReassignedBackToOriginalQueue(queueName, movedTaskIdentifier);
 });
 
 And("I verify the task is in the original queue", () => {
-  taskActionPage.verifyTaskReassignedBackToOriginalQueue(originalQueueName);
+  taskActionPage.verifyTaskReassignedBackToOriginalQueue(originalQueueName, movedTaskIdentifier);
+});
+
+And("I verify the task {string} is in the original queue", (taskIdentifier) => {
+  taskActionPage.verifyTaskReassignedBackToOriginalQueue(originalQueueName, taskIdentifier);
 });
 
 // Assign Task Steps
-let selectedUserName = "";
+let selectedUserName = "Deepsana Thapa";
 
 And("I click on the user avatar", () => {
   taskActionPage.clickUserAvatar();
@@ -139,9 +150,9 @@ And("I verify the task is assigned to the user", () => {
 Given("A task is assigned to a user", () => {
   // Task is already assigned from the previous scenario (Assign task to a user)
   // Verify the task is assigned by checking for the assigned chip
-  cy.get('[data-cy="task-assigned-chip"]', { timeout: 10000 })
+  cy.get('[data-cy="task-list-item-assign-task-to"]', { timeout: 10000 })
     .should('be.visible');
-  cy.get('[data-cy="task-assigned-chip"]')
+  cy.get('[data-cy="task-list-item-assign-task-to"]')
     .invoke('text')
     .then((text) => {
       selectedUserName = text.trim();
@@ -162,7 +173,7 @@ And("I select user {string} from dropdown", (userName) => {
   taskActionPage.selectUserFromDropdown(userName);
 });
 
-Then("The task should be unassigned", () => {
+Then("The user should be unassigned", () => {
   taskActionPage.verifyTaskUnassigned();
 });
 
