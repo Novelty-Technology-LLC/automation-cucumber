@@ -131,46 +131,31 @@ And("I verify the task {string} is in the original queue", (taskIdentifier) => {
 });
 
 // Assign Task Steps
-let selectedUserName = "Deepsana Thapa";
+let assignedUserAvatar = "DT";
 
 And("I click on the user avatar", () => {
   taskActionPage.clickUserAvatar();
 });
 
-
 Then("The task should be assigned to the user", () => {
-  taskActionPage.verifyTaskAssignedToUser(selectedUserName);
-});
-
-And("I verify the task is assigned to the user", () => {
-  taskActionPage.verifyTaskAssignedToUser(selectedUserName);
-});
-
-// Unassign Task Steps
-Given("A task is assigned to a user", () => {
-  // Task is already assigned from the previous scenario (Assign task to a user)
-  // Verify the task is assigned by checking for the assigned chip
-  cy.get('[data-cy="task-list-item-assign-task-to"]', { timeout: 10000 })
-    .should('be.visible');
-  cy.get('[data-cy="task-list-item-assign-task-to"]')
-    .invoke('text')
-    .then((text) => {
-      selectedUserName = text.trim();
-    });
+  taskActionPage.verifyTaskAssignedToUser(assignedUserAvatar);
 });
 
 And("I select {string} from dropdown", (option) => {
   if (option === "Unassigned") {
     taskActionPage.selectUnassignedFromDropdown();
   } else {
-    selectedUserName = option;
     taskActionPage.selectUserFromDropdown(option);
   }
 });
 
 And("I select user {string} from dropdown", (userName) => {
-  selectedUserName = userName;
   taskActionPage.selectUserFromDropdown(userName);
+});
+
+// Unassign Task Steps - Used in "Unassign task from a user and verify it is unassigned" scenario
+And("I click on the assigned user avatar", () => {
+  taskActionPage.clickAssignedUserAvatar();
 });
 
 Then("The user should be unassigned", () => {

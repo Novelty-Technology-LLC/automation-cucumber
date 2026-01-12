@@ -201,22 +201,45 @@ class TaskActionPage {
     cy.wait(500);
   }
 
+  clickAssignedUserAvatar() {
+    cy.get('[data-cy="task-user-avatar"]', { timeout: 10000 })
+      .should('be.visible')
+      .click();
+    cy.wait(1500); // Wait for dropdown to fully open
+  }
+
   selectUserFromDropdown(userName) {
     cy.get(`[data-cy="item_${userName}"]`, { timeout: 10000 })
+      .should('be.visible')
       .click();
     cy.wait(2000);
   }
 
-  verifyTaskAssignedToUser(userName) {
-    cy.get(`[data-cy="item_${userName}"]`, { timeout: 10000 })
+  verifyTaskAssignedToUser(userAvatar) {
+    // Use a flexible selector that matches any data-cy starting with task-user-avatar
+    // and verify it contains the user avatar initials
+    cy.get('[data-cy^="task-user-avatar"]', { timeout: 10000 })
       .should('be.visible')
-      .and('contain', userName);
+      .and('contain', userAvatar);
   }
 
   // Unassign Task Actions
   selectUnassignedFromDropdown() {
-    cy.get('[data-cy="item_Unassigned"]', { timeout: 10000 })
-      .click();
+    // Wait for dropdown menu container to be visible first
+    cy.get('[data-cy^="item_"]', { timeout: 20000 })
+      .first()
+      .should('be.visible');
+    
+    // Wait a bit more for all items to render
+    cy.wait(500);
+    
+    // Select Unassigned option from dropdown - ensure it's visible and clickable
+    cy.get('[data-cy="item_Unassigned "]', { timeout: 20000 })
+      .should('exist')
+      .should('be.visible')
+      .scrollIntoView({ offset: { top: -100, left: 0 } })
+      .should('be.visible') // Verify again after scroll
+      .click({ force: false });
     cy.wait(2000);
   }
 

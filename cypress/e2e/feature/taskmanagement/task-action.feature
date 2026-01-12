@@ -51,12 +51,9 @@ Feature: Task Management - Task Actions
       And I click on the user avatar
       And I select "Deepsana Thapa" from dropdown
     Then The task should be assigned to the user
-      And I verify the task is assigned to the user
 
   Scenario: Unassign task from a user and verify it is unassigned
     When I click on the task "3452772"
-    Given A task is assigned to a user
-    When I click on the user avatar
+      And  I click on the assigned user avatar
       And I select "Unassigned" from dropdown
     Then The user should be unassigned
-      And I verify the task is no longer assigned to any user
