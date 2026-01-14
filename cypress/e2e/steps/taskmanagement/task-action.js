@@ -51,6 +51,10 @@ And("I hold the task for 1 day", () => {
   taskActionPage.holdTaskForOneDay();
 });
 
+And("I enter notes for holding the task", () => {
+  taskActionPage.enterNotesForHold();
+});
+
 Then("The task should be on hold for 1 day", () => {
   taskActionPage.verifyHoldSuccessToast();
 });
@@ -69,6 +73,10 @@ And("The task should be visible in the on-hold filter", () => {
 
 And("I click on resume action", () => {
   taskActionPage.clickResumeAction();
+});
+
+And("I enter notes for resuming the task", () => {
+  taskActionPage.enterNotesForResume();
 });
 
 Then("The task should be resumed", () => {
@@ -93,6 +101,10 @@ And("I select target queue {string}", (queueName) => {
   taskActionPage.selectTargetQueue(queueName);
 });
 
+And("I enter notes for moving the task", () => {
+  taskActionPage.enterNotesForMove();
+});
+
 And("I confirm the move action", () => {
   taskActionPage.confirmMoveAction();
 });
@@ -112,6 +124,10 @@ And("I verify the task {string} is in the target queue", (taskIdentifier) => {
 // Reassign Back Steps
 And("I click on reassign back action", () => {
   taskActionPage.clickReassignBackAction();
+});
+
+And("I enter notes for reassigning back the task", () => {
+  taskActionPage.enterNotesForReassignBack();
 });
 
 And("I confirm the reassign back action", () => {
@@ -137,6 +153,10 @@ And("I click on the user avatar", () => {
   taskActionPage.clickUserAvatar();
 });
 
+And("I enter notes for assigning the user", () => {
+  taskActionPage.enterNotesForAssign();
+});
+
 Then("The task should be assigned to the user", () => {
   taskActionPage.verifyTaskAssignedToUser(assignedUserAvatar);
 });
@@ -156,6 +176,10 @@ And("I select user {string} from dropdown", (userName) => {
 // Unassign Task Steps - Used in "Unassign task from a user and verify it is unassigned" scenario
 And("I click on the assigned user avatar", () => {
   taskActionPage.clickAssignedUserAvatar();
+});
+
+And("I enter notes for unassigning the user", () => {
+  taskActionPage.enterNotesForUnassign();
 });
 
 Then("The user should be unassigned", () => {

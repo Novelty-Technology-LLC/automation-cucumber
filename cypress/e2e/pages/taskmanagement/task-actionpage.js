@@ -69,7 +69,14 @@ class TaskActionPage {
     cy.get('[data-cy="item_1 Day"]', { timeout: 10000 })
       .click();
     cy.wait(2000);
-    cy.get('[data-cy="btn_confirm"]', { timeout: 10000 }).click();
+  }
+
+  enterNotesForHold(note = "Hold task: Task is on hold now.") {
+    cy.get('[data-cy="task-hold-confirm-button-note-input"]', { timeout: 10000 })
+      .should('be.visible')
+      .type(note);
+    cy.wait(500);
+    cy.get('[data-cy="task-hold-confirm-button"]', { timeout: 10000 }).click();
     cy.wait(1000);
     cy.get('[data-cy="task-list-item-button"]', { timeout: 20000 })
       .first()
@@ -107,7 +114,14 @@ class TaskActionPage {
     cy.get('[data-cy="task-resume-action"]', { timeout: 10000 })
       .click();
     cy.wait(500);
-    cy.get('[data-cy="btn_confirm"]', { timeout: 10000 }).click();
+  }
+
+  enterNotesForResume(note = "Resume task: Task resumed successfully") {
+    cy.get('[data-cy="task-resume-confirm-button-note-input"]', { timeout: 10000 })
+      .should('be.visible')
+      .type(note);
+    cy.wait(500);
+    cy.get('[data-cy="task-resume-confirm-button"]', { timeout: 10000 }).click();
     cy.wait(1000);
     cy.get('[data-cy="task-list-item-button"]', { timeout: 20000 })
       .first()
@@ -140,8 +154,15 @@ class TaskActionPage {
     cy.wait(500);
   }
 
+  enterNotesForMove(note = "Move task: Task moved to new queue.") {
+    cy.get('[data-cy="task-move-confirm-button-note-input"]', { timeout: 10000 })
+      .should('be.visible')
+      .type(note);
+    cy.wait(500);
+  }
+
   confirmMoveAction() {
-    cy.get('[data-cy="btn_confirm"]', { timeout: 10000 })
+    cy.get('[data-cy="task-move-confirm-button"]', { timeout: 10000 })
       .click();
     cy.wait(2000);
   }
@@ -169,8 +190,15 @@ class TaskActionPage {
     cy.wait(500);
   }
 
+  enterNotesForReassignBack(note = "Reassigning task back to original queue") {
+    cy.get('[data-cy="task-reset-confirm-button-note-input"]', { timeout: 10000 })
+      .should('be.visible')
+      .type(note);
+    cy.wait(500);
+  }
+
   confirmReassignBackAction() {
-    cy.get('[data-cy="btn_confirm"]', { timeout: 10000 })
+    cy.get('[data-cy="task-reset-confirm-button"]', { timeout: 10000 })
       .click();
     cy.wait(2000);
   }
@@ -215,9 +243,18 @@ class TaskActionPage {
     cy.wait(2000);
   }
 
+  enterNotesForAssign(note = "Assign user: User assigned to task") {
+    cy.get('[data-cy="task-assign-confirm-button-note-input"]', { timeout: 10000 })
+      .should('be.visible')
+      .type(note);
+    cy.wait(500);
+    cy.get('[data-cy="task-assign-confirm-button"]', { timeout: 10000 })
+      .click();
+    cy.wait(2000);
+
+  }
+
   verifyTaskAssignedToUser(userAvatar) {
-    // Use a flexible selector that matches any data-cy starting with task-user-avatar
-    // and verify it contains the user avatar initials
     cy.get('[data-cy^="task-user-avatar"]', { timeout: 10000 })
       .should('be.visible')
       .and('contain', userAvatar);
@@ -240,6 +277,16 @@ class TaskActionPage {
       .scrollIntoView({ offset: { top: -100, left: 0 } })
       .should('be.visible') // Verify again after scroll
       .click({ force: false });
+    cy.wait(2000);
+  }
+
+  enterNotesForUnassign(note = "Unassign user: User removed from task") {
+    cy.get('[data-cy="task-unassign-confirm-button-note-input"]', { timeout: 10000 })
+      .should('be.visible')
+      .type(note);
+    cy.wait(500);
+    cy.get('[data-cy="task-unassign-confirm-button"]', { timeout: 10000 })
+      .click();
     cy.wait(2000);
   }
 
