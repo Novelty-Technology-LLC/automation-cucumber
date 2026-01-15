@@ -38,7 +38,7 @@ import { loginPage } from '../../pages/authentication/loginpage.js';
   });
 
   Then("I should see validation messages for missing fields on modal", () => {
-   companyPage.verifyValidationMessages;
+   companyPage.verifyValidationMessages();
   });
 
   And('I enter duplicate company code', () => {
