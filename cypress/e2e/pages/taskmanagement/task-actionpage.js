@@ -1,5 +1,5 @@
 import { taskCreationPage } from './task-creationpage.js';
-import { TIMEOUT } from '../util/constants.js';
+import { TIMEOUT } from '../../util/constants.js';
 
 class TaskActionPage {
   loadFilesInSftp() {
