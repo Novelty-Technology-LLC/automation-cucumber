@@ -27,32 +27,6 @@ class TaskActionPage {
     cy.wait(1000);
   }
 
-  getTaskIdentifier() {
-    return cy.get('[data-cy="task-identifier"]', { timeout: TIMEOUT.LONG })
-      .invoke('text')
-      .then((text) => {
-        return text.trim();
-      });
-  }
-
-  getTaskIdentifierFromDetail() {
-    return cy.get('[data-cy="task-identifier"]', { timeout: TIMEOUT.LONG })
-      .invoke('text')
-      .then((text) => {
-        return text.trim();
-      });
-  }
-
-  getTaskNumberFromList() {
-    return cy.get('[data-cy="task-list-item-button"]', { timeout: TIMEOUT.TOO_LONG })
-      .first()
-      .invoke('text')
-      .then((text) => {
-        // Extract task number from the text (assuming format like "Task 12345" or just "12345")
-        return text.trim();
-      });
-  }
-
   clickEllipsesMenu() {
     cy.get('[data-cy="task-ellipses-menu"]', { timeout: TIMEOUT.LONG })
       .click();
@@ -79,9 +53,6 @@ class TaskActionPage {
     cy.wait(500);
     cy.get('[data-cy="task-hold-confirm-button"]', { timeout: TIMEOUT.LONG }).click();
     cy.wait(1000);
-    cy.get('[data-cy="task-list-item-button"]', { timeout: TIMEOUT.TOO_LONG })
-      .first()
-      .click();
   }
 
   verifyTaskOnHoldForOneDay() {
@@ -124,9 +95,6 @@ class TaskActionPage {
     cy.wait(500);
     cy.get('[data-cy="task-resume-confirm-button"]', { timeout: TIMEOUT.LONG }).click();
     cy.wait(1000);
-    cy.get('[data-cy="task-list-item-button"]', { timeout: TIMEOUT.TOO_LONG })
-      .first()
-      .click();
   }
 
   verifyTaskResumed() {
@@ -214,15 +182,6 @@ class TaskActionPage {
       .contains(taskIdentifier)
       .should('be.visible');
   }
-
-  getCurrentQueueName() {
-    return cy.get('[data-cy="queue-header"]', { timeout: TIMEOUT.LONG })
-      .invoke('text')
-      .then((text) => {
-        return text.trim();
-      });
-  }
-
   // Assign Task Actions
   clickUserAvatar() {
     cy.get('[data-cy="task-list-item-assign-task-to"]', { timeout: TIMEOUT.LONG })

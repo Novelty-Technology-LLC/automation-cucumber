@@ -57,10 +57,6 @@ class TaskCreationPage {
     cy.wait(30000);
   }
 
-  verifyInvoiceBillingTaskCreated() {
-    cy.get('[data-cy="queue-header"]').should('contain', 'Commercial');
-  }
-
   verifyTaskCreatedInCommercialQueue() {
     cy.get('[data-cy="queue-header"]', { timeout: 20000 })
       .contains('Commercial')
