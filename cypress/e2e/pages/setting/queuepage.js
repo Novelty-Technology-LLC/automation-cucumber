@@ -1,9 +1,10 @@
+import { WAIT } from '../../util/constants.js';
 
 class QueuePage {
   navigateToQueueManagement() {
     cy.viewport(1380, 720);
     cy.get('[data-cy="header-setting"]').click();
-    cy.wait(1000);
+    cy.wait(WAIT.NORMAL);
     cy.get('[data-cy="sidebar-queue-management"]').click();
   }
 
@@ -37,13 +38,17 @@ class QueuePage {
   }
 
   clickAssignRepresentative() {
-     cy.get('[data-cy="queue_table-ellipsis-menu"]').first().click().wait(3000).get('[data-cy="queue_assign-representative-btn"]').click();
+    cy.get('[data-cy="queue_table-ellipsis-menu"]').first().click();
+    cy.wait(WAIT.EXTRA_LONG);
+    cy.get('[data-cy="queue_assign-representative-btn"]').click();
   }
 
   enterRepresentative(name = "Deepsana Thapa") {
     cy.get('[data-cy="input_user-autocomplete"]').type(name);
-    cy.wait(1000);
-    cy.get('[data-cy="input_user-autocomplete"]').click().wait(1000).type('{downarrow}{enter}');
+    cy.wait(WAIT.NORMAL);
+    cy.get('[data-cy="input_user-autocomplete"]').click();
+    cy.wait(WAIT.NORMAL);
+    cy.get('[data-cy="input_user-autocomplete"]').type('{downarrow}{enter}');
   }
 
   saveAssignedRepresentative() {
@@ -83,7 +88,9 @@ class QueuePage {
   }
 
   clickEditQueue() {
-    cy.get('[data-cy="queue_table-ellipsis-menu"]').first().click().wait(3000).get('[data-cy="queue_edit-btn"]').click();
+    cy.get('[data-cy="queue_table-ellipsis-menu"]').first().click();
+    cy.wait(WAIT.EXTRA_LONG);
+    cy.get('[data-cy="queue_edit-btn"]').click();
   }
 
   editQueueName(name = "Signature") {
@@ -107,7 +114,8 @@ class QueuePage {
       $queues.each((index, queue) => {
         if (found) return false; // Breaks out of the loop manually
         const queueText = Cypress.$(queue).text().trim(); // Get queue name synchronously
-        cy.get('[data-cy="queue-count"]').wait(1000)
+        cy.wait(WAIT.NORMAL);
+        cy.get('[data-cy="queue-count"]')
           .eq(index)
           .invoke("text")
           .then((countText) => {
@@ -127,24 +135,27 @@ class QueuePage {
     cy.get('[data-cy="header-setting"]').click();
     cy.get('[data-cy="sidebar-queue-management"]').click();
     cy.get('@Queue').then((queueText) => {
-    cy.log("Queue Name Found:", queueText); // Debugging
-    cy.wait(1000);
-    // **Find the correct queue row dynamically**
-    cy.get('table tr').each(($row) => {
-      cy.wrap($row)
-        .find('th:nth-child(1)') // Locate the queue name
-        .invoke('text')
-        .then((text) => {
-          if (text.trim() === queueText) {
-            cy.log("Delete Queue Name:", queueText);
-            cy.wrap($row)
-              .get('[data-cy="queue_table-ellipsis-menu"]').eq(0)
-              .click().wait(3000).get('[data-cy="queue_delete-btn"]').click();
+      cy.log("Queue Name Found:", queueText); // Debugging
+      cy.wait(WAIT.NORMAL);
+      // **Find the correct queue row dynamically**
+      cy.get('table tr').each(($row) => {
+        cy.wrap($row)
+          .find('th:nth-child(1)') // Locate the queue name
+          .invoke('text')
+          .then((text) => {
+            if (text.trim() === queueText) {
+              cy.log("Delete Queue Name:", queueText);
+              cy.wrap($row)
+                .find('[data-cy="queue_table-ellipsis-menu"]')
+                .eq(0)
+                .click();
+              cy.wait(WAIT.EXTRA_LONG);
+              cy.get('[data-cy="queue_delete-btn"]').click();
               cy.get('[data-cy="queue-delete-btn"]').click();
-          }
-        });
+            }
+          });
+      });
     });
-  });
   }
 
   verifyQueueDeleteSuccess() {
@@ -160,7 +171,8 @@ class QueuePage {
       $queues.each((index, queue) => {
         if (found) return false; // Breaks out of the loop manually
         const queueText = Cypress.$(queue).text().trim(); // Get queue name synchronously
-        cy.get('[data-cy="queue-count"]').wait(1000)
+        cy.wait(WAIT.NORMAL);
+        cy.get('[data-cy="queue-count"]')
           .eq(index)
           .invoke("text")
           .then((countText) => {
@@ -177,27 +189,30 @@ class QueuePage {
   }
 
   confirmDeletionOfQueueWithTask() {
-     cy.get('[data-cy="header-setting"]').click();
+    cy.get('[data-cy="header-setting"]').click();
     cy.get('[data-cy="sidebar-queue-management"]').click();
     cy.get('@selectedQueue').then((queueText) => {
-    cy.log("Queue Name Found:", queueText); // Debugging
-    cy.wait(1000);
-    // **Find the correct queue row dynamically**
-    cy.get('table tr').each(($row) => {
-      cy.wrap($row)
-        .find('th:nth-child(1)') // Locate the queue name
-        .invoke('text')
-        .then((text) => {
-          if (text.trim() === queueText) {
-            cy.log("Delete Queue Name:", queueText);
-            cy.wrap($row)
-              .find('[data-cy="queue_table-ellipsis-menu"]')
-              .click().wait(3000).get('[data-cy="queue_delete-btn"]').click();
-              cy.get('[data-cy="queue-delete-btn"]').wait(1000).click();
-          }
-        });
+      cy.log("Queue Name Found:", queueText); // Debugging
+      cy.wait(WAIT.NORMAL);
+      // **Find the correct queue row dynamically**
+      cy.get('table tr').each(($row) => {
+        cy.wrap($row)
+          .find('th:nth-child(1)') // Locate the queue name
+          .invoke('text')
+          .then((text) => {
+            if (text.trim() === queueText) {
+              cy.log("Delete Queue Name:", queueText);
+              cy.wrap($row)
+                .find('[data-cy="queue_table-ellipsis-menu"]')
+                .click();
+              cy.wait(WAIT.EXTRA_LONG);
+              cy.get('[data-cy="queue_delete-btn"]').click();
+              cy.wait(WAIT.NORMAL);
+              cy.get('[data-cy="queue-delete-btn"]').click();
+            }
+          });
+      });
     });
-  });
   }
 
   verifyQueueDeleteError(){
