@@ -1,0 +1,6 @@
+export const TIMEOUT = {
+  NORMAL: 5000,
+  LONG: 10000,
+  TOO_LONG: 20000,
+  ULTRA_LONG: 30000
+};
