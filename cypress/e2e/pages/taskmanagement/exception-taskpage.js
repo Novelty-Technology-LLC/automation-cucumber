@@ -1,3 +1,5 @@
+import { WAIT } from '../../util/constants.js';
+
 class ExceptionTaskPage {
   constructor() {
     this.exceptionCode = 'SERVICE-LINE-INFO-MISSING';
@@ -36,24 +38,24 @@ class ExceptionTaskPage {
 
   goToARModule() {
     cy.viewport(1380, 720);
-    cy.wait(1000);
+    cy.wait(WAIT.NORMAL);
     cy.url().should("eq", `${Cypress.env("BASE_URL")}/dashboard`);
-    cy.wait(1000);
+    cy.wait(WAIT.NORMAL);
   }
 
   uploadIBFileOnly() {
     this.uploadFileToSftp('cypress/fixtures/missing-serviceline-exception/3361074(IB).xlsx', '/qa/ardb/3361074(IB).xlsx');
-    cy.wait(20000);
+    cy.wait(WAIT.SFTP_UPLOAD);
   }
 
   uploadIBDFile() {
     this.uploadFileToSftp('cypress/fixtures/missing-serviceline-exception/3361074(IBD).xlsx', '/qa/ardb/3361074(IBD).xlsx');
-    cy.wait(20000);
+    cy.wait(WAIT.SFTP_UPLOAD);
   }
 
   upload835EDIFile() {
     this.uploadFileToSftp('cypress/fixtures/missing-serviceline-exception/3361074.edi', '/qa/edi_835/3361074.edi');
-    cy.wait(30000);
+    cy.wait(WAIT.EDI_PROCESSING);
   }
 
   verifyTaskInMissingBillingQueue() {
@@ -67,7 +69,7 @@ class ExceptionTaskPage {
     cy.get('[data-cy="task-list-item-button"]', { timeout: 20000 })
       .contains('3361074')
       .click();
-    cy.wait(1000);
+    cy.wait(WAIT.NORMAL);
   }
 
   verifyMissingServiceLineExceptionAccordion() {
@@ -80,7 +82,7 @@ class ExceptionTaskPage {
   hoverOverAccordion() {
     cy.get(this.getExceptionAccordionSelector(), { timeout: 10000 })
       .trigger('mouseover');
-    cy.wait(500);
+    cy.wait(WAIT.SHORT);
   }
 
   verifyExceptionDetailText() {
@@ -100,29 +102,29 @@ class ExceptionTaskPage {
     cy.get('[data-cy="btn_go_back"]')
       .contains('Go Back')
       .click();
-      cy.wait(10000);
+      cy.wait(WAIT.FILE_UPLOAD);
   }
 
   uploadIBDFileOnly() {
     this.uploadFileToSftp('cypress/fixtures/missing-billing-info/3395969(IBD).xlsx', '/qa/ardb/3395969(IBD).xlsx');
-    cy.wait(20000);
+    cy.wait(WAIT.SFTP_UPLOAD);
   }
 
   uploadIBFile() {
     this.uploadFileToSftp('cypress/fixtures/missing-billing-info/3395969(IB).xlsx', '/qa/ardb/3395969(IB).xlsx');
-    cy.wait(20000);
+    cy.wait(WAIT.SFTP_UPLOAD);
   }
 
   upload835EDIFileForMissingBillingInfo() {
     this.uploadFileToSftp('cypress/fixtures/missing-billing-info/3395969.DAT', '/qa/edi_835/3395969.DAT');
-    cy.wait(30000);
+    cy.wait(WAIT.EDI_PROCESSING);
   }
 
   clickOnTaskForMissingBillingInfo() {
     cy.get('[data-cy="task-list-item-button"]', { timeout: 20000 })
       .contains('3395969')
       .click();
-    cy.wait(1000);
+    cy.wait(WAIT.NORMAL);
   }
 
   verifyMissingBillingInfoExceptionAccordion() {
@@ -135,7 +137,7 @@ class ExceptionTaskPage {
   hoverOverMissingBillingInfoAccordion() {
     cy.get(this.getMissingBillingExceptionAccordionSelector(), { timeout: 10000 })
       .trigger('mouseover');
-    cy.wait(500);
+    cy.wait(WAIT.SHORT);
   }
 
   verifyMissingBillingInfoExceptionDetailText() {
@@ -161,7 +163,7 @@ class ExceptionTaskPage {
     cy.get('[data-cy="queue-header"]')
       .contains('Commercial')
       .click();
-    cy.wait(2000);
+    cy.wait(WAIT.LONG);
     
     cy.get('[data-cy="task-list-item-button"]', { timeout: 20000 })
       .contains('3361074')
@@ -177,7 +179,7 @@ class ExceptionTaskPage {
     cy.get('[data-cy="queue-header"]')
       .contains('Commercial')
       .click();
-    cy.wait(2000);
+    cy.wait(WAIT.LONG);
     
     cy.get('[data-cy="task-list-item-button"]', { timeout: 20000 })
       .contains('3395969')
