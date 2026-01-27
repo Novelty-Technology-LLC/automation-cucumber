@@ -25,7 +25,7 @@ class ExceptionTaskPage {
   getSftpConfig() {
     return {
       host: Cypress.env('SFTP_HOST') || 'your-sftp-server.com',
-      port: 22,
+      port: parseInt(Cypress.env('SFTP_PORT')) || 22,
       username: Cypress.env('SFTP_USERNAME') || 'your-username',
       password: Cypress.env('SFTP_PASSWORD') || 'your-password',
     };
